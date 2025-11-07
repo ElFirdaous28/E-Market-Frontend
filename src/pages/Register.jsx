@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Store, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { Logo } from '../components/Logo';
+import eStoreLogo from '../assets/images/e-store.png';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -40,9 +41,9 @@ const Register = () => {
             {/* Left side - Store illustration */}
             <div className="hidden md:flex w-2/5 justify-center">
                 <img
-                    src="/e-store.png"
+                    src={eStoreLogo}
                     srcSet="/e-store@2x.png 2x, /e-store@3x.png 3x"
-                    alt="Logo"
+                    alt="store on mobile"
                     className="w-full object-contain"
                 />
             </div>
@@ -59,7 +60,7 @@ const Register = () => {
                         Create Your Account And<br />Start Shopping :)
                     </h1>
 
-                    <div className="space-y-10 w-full ">
+                    <div className="space-y-10 w-full lg:px-10 ">
                         {/* Full Name */}
                         <div>
                             <label className="block text-textMain text-sm font-medium mb-2">
@@ -168,7 +169,7 @@ const Register = () => {
                             type="submit"
                             className="w-full bg-primary hover:bg-emerald-600 text-textMain font-semibold py-3 rounded-lg transition-colors"
                         >
-                            Sign In
+                            Sign Up
                         </button>
 
                         {/* Sign in link */}
