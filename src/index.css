@@ -1,3 +1,29 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* 1. Define your dark mode variant FIRST */
+@variant dark (&:where(.dark, .dark *));
+
+/* 2. Define ALL your colors in @theme with BOTH light and dark values */
+@theme {
+    /* Light mode colors (default) */
+    --color-primary: #01B765;
+    --color-background: #FFFFFF;
+    --color-surface: #F8F9FB;
+    --color-textMain: #181A1E;
+    --color-textMuted: #5F6168;
+    --color-border: #E5E7EB;
+
+    /* Dark mode colors */
+    --color-background-dark: #181A1E;
+    --color-surface-dark: #1F2125;
+    --color-textMain-dark: #FFFFFF;
+    --color-textMuted-dark: #B4B7BE;
+    --color-border-dark: #2A2D32;
+}
+
+/* --- Your base styles --- */
+html,
+body,
+#root {
+    height: 100%;
+}
