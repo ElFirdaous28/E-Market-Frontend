@@ -52,7 +52,7 @@ const Login = () => {
             {/* Right side - Registration form */}
             <div className="w-full md:w-3/5 lg:w-1/3 flex flex-col items-center">
                 {/* Logo */}
-                <Logo />
+                <Logo className="mb-10" />
 
                 {/* Form container */}
                 <div className="w-11/12 border border-primary rounded-lg p-6 lg:p-8 bg-background mb-10">
