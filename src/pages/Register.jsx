@@ -2,8 +2,13 @@ import { useState } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import { Logo } from '../components/Logo';
 import eStoreLogo from '../assets/images/e-store.png';
+import { useAuth } from '../contexts/AuthContext';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
+    const { register } = useAuth();
+    const navigate = useNavigate;
+
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -22,18 +27,17 @@ const Register = () => {
         }));
     };
 
-    const handleSubmit = (e) => {
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!agreedToTerms) {
-            alert('Please agree to the Terms of Service and Privacy Policy');
-            return;
+        if (formData.password !== formData.confirmPassword) return alert("Passwords don't match");
+
+        try {
+            await register(formData.fullName, formData.email, formData.password);
+            navigate("/products", { replace: true });
+        } catch (err) {
+            console.log(err.response?.data?.message || "Something went wrong");
         }
-        if (formData.password !== formData.confirmPassword) {
-            alert('Passwords do not match');
-            return;
-        }
-        console.log('Form submitted:', formData);
-        alert('Account created successfully!');
     };
 
     return (
@@ -60,7 +64,7 @@ const Register = () => {
                         Create Your Account And<br />Start Shopping :)
                     </h1>
 
-                    <div className="space-y-10 w-full lg:px-10 ">
+                    <form onSubmit={handleSubmit} className="space-y-10 w-full lg:px-10 ">
                         {/* Full Name */}
                         <div>
                             <label className="block text-textMain text-sm font-medium mb-2">
@@ -175,12 +179,12 @@ const Register = () => {
                         {/* Sign in link */}
                         <div className="text-center text-sm text-textMuted">
                             Already have an account?{' '}
-                            <a href="#" className="text-primary hover:text-emerald-400">
+                            <Link to="/login" className="text-primary hover:text-emerald-400">
                                 Sign in
-                            </a>
+                            </Link>
                         </div>
 
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
