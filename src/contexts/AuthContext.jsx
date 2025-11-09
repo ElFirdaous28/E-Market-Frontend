@@ -25,6 +25,7 @@ export const AuthProvider = ({ children }) => {
                 });
 
                 setUser(profile.data.user);
+                
             } catch (err) {
                 console.log("Not logged in", err.message);
                 setUser(null);
