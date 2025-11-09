@@ -2,11 +2,15 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import AuthRoutes from "./AuthRoutes"
 import NotFound from "../pages/NotFound"
 import DarkToggle from "../pages/darkToggel"
+import Products from "../pages/Products"
+import { Home } from "../pages/Home"
 
 const AppRoutes = () => {
     return (
         <BrowserRouter>
             <Routes>
+                <Route path='/' element={<Home />}></Route>
+                <Route path='/products' element={<Products />}></Route>
                 {AuthRoutes()}
 
                 {/* catche not found routes */}
