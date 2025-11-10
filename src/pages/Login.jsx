@@ -1,81 +1,88 @@
-import { useState } from 'react';
-import { Eye, EyeOff } from 'lucide-react';
-import { Logo } from '../components/Logo';
-import eStoreLogo from '../assets/images/e-store.png';
-import { useAuth } from '../contexts/AuthContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { Eye, EyeOff } from "lucide-react";
+import { Logo } from "../components/Logo";
+import eStoreLogo from "../assets/images/e-store.png";
+import { useAuth } from "../contexts/AuthContext";
+import { Link, useNavigate } from "react-router-dom";
+import { loginSchema } from "../validations/loginSchema";
 
 const Login = () => {
     const { login } = useAuth();
     const navigate = useNavigate();
-
-    const [formData, setFormData] = useState({
-        email: '',
-        password: '',
-    });
     const [showPassword, setShowPassword] = useState(false);
-    const [rememberMe, setRememberMe] = useState(false);
+    const [backendError, setBackendError] = useState("");
 
+    const {
+        register,
+        handleSubmit,
+        formState: { errors, isSubmitting },
+    } = useForm({
+        resolver: yupResolver(loginSchema),
+    });
 
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
+    const onSubmit = async (data) => {
         try {
-            await login(formData.email, formData.password);
+            setBackendError("");
+            await login(data.email, data.password);
             navigate("/products", { replace: true });
         } catch (err) {
-            console.log(err);
+            if (err.response) {
+                const res = err.response;
 
-            console.log(err.response?.data?.message || "Something went wrong");
+                if (res.data?.errors) {
+                    Object.entries(res.data.errors).forEach(([field, message]) => {
+                        setError(field, { type: "backend", message });
+                    });
+                }
+                else if (res.data?.message) {
+                    setBackendError(res.data.message);
+                }
+                else {
+                    setBackendError("Something went wrong");
+                }
+            } else {
+                setBackendError("Network error or server not reachable");
+            }
+
+            console.error(err);
         }
     };
+
+
     return (
         <div className="flex flex-col md:flex-row gap-40 items-center">
-            {/* Left side - Store illustration */}
+            {/* Left side */}
             <div className="hidden md:flex w-2/5 justify-center">
-                <img
-                    src={eStoreLogo}
-                    srcSet="/e-store@2x.png 2x, /e-store@3x.png 3x"
-                    alt="store on mobile"
-                    className="w-full object-contain"
-                />
+                <img src={eStoreLogo} alt="store" className="w-full object-contain" />
             </div>
 
-            {/* Right side - Registration form */}
+            {/* Right side */}
             <div className="w-full md:w-3/5 lg:w-1/3 flex flex-col items-center">
-                {/* Logo */}
                 <Logo className="mb-10" />
 
-                {/* Form container */}
                 <div className="w-11/12 border border-primary rounded-lg p-6 lg:p-8 bg-background mb-10">
-                    {/* Form header */}
                     <h1 className="text-textMain text-xl lg:text-2xl font-semibold text-center mb-6">
-                        Create Your Account And<br />Start Shopping :)
+                        Sign in to your account
                     </h1>
 
-                    <form onSubmit={handleSubmit} className="space-y-10 w-full lg:px-10 ">
-                        {/* Email Address */}
+                    <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 w-full lg:px-10">
+                        {/* Email */}
                         <div>
                             <label className="block text-textMain text-sm font-medium mb-2">
                                 Email Address
                             </label>
                             <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
+                                type="text"
+                                {...register("email")}
                                 placeholder="jhon@example.com"
-                                className="w-full bg-surface  border border-border rounded-lg px-4 py-3 text-textMain placeholder-textMuted focus:outline-none focus:border-primary transition-colors"
-                                required
+                                className={`w-full bg-surface border rounded-lg px-4 py-3 text-textMain placeholder-textMuted focus:outline-none transition-colors ${errors.email ? "border-red-500" : "border-border focus:border-primary"
+                                    }`}
                             />
+                            {errors.email && (
+                                <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                            )}
                         </div>
 
                         {/* Password */}
@@ -86,12 +93,10 @@ const Login = () => {
                             <div className="relative">
                                 <input
                                     type={showPassword ? "text" : "password"}
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleInputChange}
+                                    {...register("password")}
                                     placeholder="••••••••"
-                                    className="w-full bg-surface  border border-border rounded-lg px-4 py-3 text-textMain placeholder-textMuted focus:outline-none focus:border-primary transition-colors pr-12"
-                                    required
+                                    className={`w-full bg-surface border rounded-lg px-4 py-3 text-textMain placeholder-textMuted focus:outline-none transition-colors pr-12 ${errors.password ? "border-red-500" : "border-border focus:border-primary"
+                                        }`}
                                 />
                                 <button
                                     type="button"
@@ -101,46 +106,31 @@ const Login = () => {
                                     {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                 </button>
                             </div>
+                            {errors.password && (
+                                <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                            )}
                         </div>
 
-                        {/* remember me/forgot password */}
-                        <div className="flex justify-between w-full">
-                            {/* Remember me*/}
-                            <div className="flex items-start gap-2">
-                                <input
-                                    type="checkbox"
-                                    id="terms"
-                                    onChange={() => setRememberMe(!rememberMe)}
-                                    className="mt-1 w-4 h-4 accent-primary"
-                                />
-                                <label htmlFor="terms" className="text-sm text-textMuted">
-                                    Remember Me
-                                </label>
-                            </div>
-
-                            {/* Forgot Password*/}
-                            <div className="flex items-start gap-2">
-
-                                <a htmlFor="terms" className="text-sm text-primary">
-                                    Forgot Passwor?
-                                </a>
-                            </div>
-
-                        </div>
-                        {/* Submit button */}
+                        {backendError && (
+                            <p className="text-red-500 text-sm -mt-7">{backendError}</p>
+                        )}
+                        {/* Submit */}
                         <button
                             type="submit"
+                            disabled={isSubmitting}
                             className="w-full bg-primary hover:bg-emerald-600 text-textMain font-semibold py-3 rounded-lg transition-colors"
                         >
-                            Sign In
+                            {isSubmitting ? "Signing in..." : "Sign In"}
                         </button>
 
-                        {/* Sign in link */}
-                        <div className="text-center text-sm text-textMuted">
-                            Already have an account?{' '}
-                            <Link to="/register" className="text-primary hover:text-emerald-400">Sign Up</Link>
-                        </div>
 
+                        {/* Sign up */}
+                        <div className="text-center text-sm text-textMuted">
+                            Don’t have an account?{" "}
+                            <Link to="/register" className="text-primary hover:text-emerald-400">
+                                Sign Up
+                            </Link>
+                        </div>
                     </form>
                 </div>
             </div>

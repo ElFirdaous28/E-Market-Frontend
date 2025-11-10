@@ -30,3 +30,14 @@
     --color-textMuted: var(--color-textMuted);
     --color-border: var(--color-border);
 }
+
+/* 👇 Add this below your Tailwind imports */
+@layer base {
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus {
+    -webkit-box-shadow: 0 0 0px 1000px var(--color-surface) inset !important;
+    -webkit-text-fill-color: var(--color-textMain) !important;
+    transition: background-color 9999s ease-in-out 0s !important;
+  }
+}
