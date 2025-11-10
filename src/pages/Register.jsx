@@ -7,6 +7,7 @@ import eStoreLogo from "../assets/images/e-store.png";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { registerSchema } from "../validations/registerSchema";
+import { toast } from "react-toastify";
 
 const Register = () => {
     const { register: registerUser } = useAuth();
@@ -28,8 +29,10 @@ const Register = () => {
         try {
             setBackendError(""); // reset
             await registerUser(data.fullName, data.email, data.password);
+            toast.success("Register successfully!");
             navigate("/products", { replace: true });
         } catch (err) {
+            toast.error("Register failed!");
             if (err.response) {
                 const res = err.response;
                 // Field-specific backend errors
@@ -151,7 +154,7 @@ const Register = () => {
                                 <p className="text-red-500 text-xs mt-1">{errors.confirmPassword.message}</p>
                             )}
                         </div>
-                        
+
                         {/* Backend general error */}
                         {backendError && (
                             <p className="text-red-500 text-sm mb-2">{backendError}</p>

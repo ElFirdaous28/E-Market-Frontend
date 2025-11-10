@@ -1,6 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import { LogOut } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 const LogoutButton = () => {
     const { logout } = useAuth();
@@ -10,8 +11,10 @@ const LogoutButton = () => {
     const handleLogout = async () => {
         try {
             await logout();
+            toast.success("Logged out successfully!");
             navigate("/login", { replace: true });
         } catch (err) {
+            toast.error("Logout failed!");
             console.error(err);
         }
     };
