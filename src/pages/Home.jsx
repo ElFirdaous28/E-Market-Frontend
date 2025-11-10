@@ -29,7 +29,7 @@ export const Home = () => {
   return (
     <>
 
-      <section className="w-3/4 bg-surface rounded-lg overflow-hidden flex flex-col md:flex-row p-4">
+      <section className="w-3/4 bg-surface rounded-lg overflow-hidden flex flex-col md:flex-row p-4 mt-40">
         <div className="w-full md:w-3/5 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
           <h1 className="text-4xl lg:text-5xl font-bold text-textMain leading-tight">
             Shop the Best Products Online

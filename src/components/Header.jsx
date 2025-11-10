@@ -17,7 +17,7 @@ export default function Header() {
     ];
 
     return (
-        <header className="flex justify-center bg-brand-dark border-b border-border shadow-md shadow-black/40">
+        <header className="flex justify-center bg-background border-b border-border shadow-md shadow-black/40 fixed top-0 left-0 w-full z-50">
             <nav className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-20">
                 <Logo />
 
