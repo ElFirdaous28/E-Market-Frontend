@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import axios from "../services/axios";
 import ProductsComponenet from "../components/Products";
+import { useCategories } from "../hooks/useCategories";
 
 const Products = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
+    const { categories } = useCategories();
+    console.log(categories);
+
 
     const [filters, setFilters] = useState({
         title: "",
@@ -71,11 +75,10 @@ const Products = () => {
                 <button
                     key={i}
                     onClick={() => setPage(i)}
-                    className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${
-                        page === i
-                            ? "bg-primary text-textMain"
-                            : "bg-brand-surface text-textMain hover:bg-primary/50"
-                    } transition-colors`}
+                    className={`w-8 h-8 rounded-full flex items-center justify-center font-semibold ${page === i
+                        ? "bg-primary text-textMain"
+                        : "bg-brand-surface text-textMain hover:bg-primary/50"
+                        } transition-colors`}
                 >
                     {i}
                 </button>
@@ -166,7 +169,7 @@ const Products = () => {
                         </div>
 
                         {/* Price Range */}
-                       <div>
+                        <div>
                             <label htmlFor="min-price" className="block text-lg font-semibold text-textMain mb-3">Min Price</label>
                             <input
                                 type="number"
@@ -193,22 +196,26 @@ const Products = () => {
                         <div>
                             <h3 className="text-lg font-semibold text-textMain mb-3">Categories</h3>
                             <div className="space-y-2">
-                                {["fashion", "garden", "electronics", "books"].map((cat) => (
-                                    <label key={cat} htmlFor={`cat-${cat}`} className="flex items-center space-x-2 text-textMuted cursor-pointer">
+                                {categories.map((cat) => (
+                                    <label
+                                        key={cat._id}
+                                        htmlFor={`cat-${cat._id}`}
+                                        className="flex items-center space-x-2 text-textMuted cursor-pointer"
+                                    >
                                         <input
                                             type="checkbox"
-                                            id={`cat-${cat}`}
+                                            id={`cat-${cat._id}`}
                                             name="category"
                                             className="accent-primary"
-                                            checked={filters.categories.includes(cat)}
+                                            checked={filters.categories.includes(cat._id)}
                                             onChange={(e) => {
                                                 const newCats = e.target.checked
-                                                    ? [...filters.categories, cat]
-                                                    : filters.categories.filter(c => c !== cat);
+                                                    ? [...filters.categories, cat._id] // store only id
+                                                    : filters.categories.filter(c => c !== cat._id);
                                                 setFilters({ ...filters, categories: newCats });
                                             }}
                                         />
-                                        <span>{cat.charAt(0).toUpperCase() + cat.slice(1)}</span>
+                                        <span>{cat.name.charAt(0).toUpperCase() + cat.name.slice(1)}</span>
                                     </label>
                                 ))}
                             </div>

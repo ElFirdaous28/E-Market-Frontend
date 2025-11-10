@@ -1,28 +1,12 @@
 import axios from "../services/axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useRef } from "react";
+import { useCategories } from "../hooks/useCategories"
 
 export default function CategoriesSlider() {
-    const [categories, setCategories] = useState([]);
-    const [loading, setLoading] = useState(true);
-
+    const { categories, loading } = useCategories();
     const sliderRef = useRef(null);
 
-    useEffect(() => {
-        const getCategories = async () => {
-            try {
-                const res = await axios.get("/categories/product-number");
-
-                setCategories(res.data.data);
-
-            } catch (error) {
-                console.error("Failed to fetch categories:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        getCategories();
-    }, []);
 
     const scrollLeft = () => {
         sliderRef.current.scrollBy({ left: -300, behavior: "smooth" });
@@ -47,7 +31,7 @@ export default function CategoriesSlider() {
                 </button>
 
                 {/* Categories container */}
-                <div 
+                <div
                     ref={sliderRef}
                     className="overflow-x-auto flex gap-6 scroll-smooth flex-1 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
                 >
@@ -74,8 +58,8 @@ export default function CategoriesSlider() {
                     <ChevronRight className="h-28 w-28" />
                 </button>
             </div>
-            
-          
+
+
         </section>
     );
 }
