@@ -2,8 +2,30 @@ import { ShoppingCart } from "lucide-react"
 import CategoriesSlider from "../components/CategoriesSlider"
 import Products from "../components/Products"
 import { Link } from "react-router-dom"
+import { useEffect, useState } from "react";
+import axios from "../services/axios";
 
 export const Home = () => {
+
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getProducts = async () => {
+      try {
+        const res = await axios.get("/products");
+        setProducts(res.data.data || []);
+      } catch (error) {
+        console.error("Failed to fetch products:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    getProducts();
+  }, []);
+
+
+  if (loading) return <div>Loading products...</div>;
   return (
     <>
 
@@ -29,7 +51,17 @@ export const Home = () => {
         </div>
       </section>
       <CategoriesSlider />
-      <Products />
+      {/* products list */}
+      <Products products={products} />
+
+      <div className="w-3/4 text-primary -mt-10 text-right">
+        <Link
+          to="/products"
+          className="text-primary font-semibold hover:underline"
+        >
+          View All &rarr;
+        </Link>
+      </div>
     </>
   )
 }
