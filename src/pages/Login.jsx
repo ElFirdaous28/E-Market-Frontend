@@ -7,6 +7,7 @@ import eStoreLogo from "../assets/images/e-store.png";
 import { useAuth } from "../contexts/AuthContext";
 import { Link, useNavigate } from "react-router-dom";
 import { loginSchema } from "../validations/loginSchema";
+import { toast } from "react-toastify";
 
 const Login = () => {
     const { login } = useAuth();
@@ -26,8 +27,10 @@ const Login = () => {
         try {
             setBackendError("");
             await login(data.email, data.password);
+            toast.success("Logged in successfully!");
             navigate("/products", { replace: true });
         } catch (err) {
+            toast.error("Login failed!");
             if (err.response) {
                 const res = err.response;
 
