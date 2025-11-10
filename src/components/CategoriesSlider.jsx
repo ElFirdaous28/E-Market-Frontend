@@ -75,11 +75,7 @@ export default function CategoriesSlider() {
                 </button>
             </div>
             
-            <style jsx>{`
-                div::-webkit-scrollbar {
-                    display: none;
-                }
-            `}</style>
+          
         </section>
     );
 }
