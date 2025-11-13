@@ -1,41 +1,31 @@
 import { useEffect, useState } from "react";
-import { getCategories } from "../services/categoryService";
+import axios from "../services/axios";
 
-let cache = null;
 
-export const useCategories = ({ forceRefresh = false } = {}) => {
-    const [categories, setCategories] = useState(cache ?? []);
-    const [loading, setLoading] = useState(!cache);
+export const useCategories = () => {
+    const [categories, setCategories] = useState([]);
+    const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
 
     useEffect(() => {
-        if (cache && !forceRefresh) {
-            setLoading(false);
-            return;
-        }
 
-        let cancelled = false;
         setLoading(true);
         setError(null);
 
         (async () => {
             try {
-                const data = await getCategories();
-                if (!cancelled) {
-                    cache = data;
-                    setCategories(data);
-                }
-            } catch (err) {
-                if (!cancelled) setError(err);
-            } finally {
-                if (!cancelled) setLoading(false);
+                const res = await axios.get("/categories/product-number");
+                setCategories((res.data.data));
+            } catch (error) {
+                console.error(error);
+            }
+            finally{
+                setLoading(false);
             }
         })();
 
-        return () => {
-            cancelled = true;
-        };
-    }, [forceRefresh]);
+    }, []);
 
-    return { categories, loading, error, refresh: () => {} };
+
+    return { categories, loading, error };
 };

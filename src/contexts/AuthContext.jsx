@@ -12,14 +12,14 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const initAuth = async () => {
             try {
-                // Step 1: Get new access token using refresh token cookie
+                // Get new access token using refresh token cookie
                 const res = await axios.post("/auth/refresh", {}, { withCredentials: true });
                 const newAccessToken = res.data.accessToken;
                 if (!newAccessToken) throw new Error("No access token returned");
 
                 setAccessToken(newAccessToken);
 
-                // Step 2: Fetch user profile with new access token
+                // Fetch user profile with new access token
                 const profile = await axios.get("/auth/profile", {
                     headers: { Authorization: `Bearer ${newAccessToken}` },
                 });
