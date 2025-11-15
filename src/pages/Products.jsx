@@ -7,8 +7,6 @@ const Products = () => {
     const [products, setProducts] = useState([]);
     const [loading, setLoading] = useState(true);
     const { categories } = useCategories();
-    console.log(categories);
-
 
     const [filters, setFilters] = useState({
         title: "",
