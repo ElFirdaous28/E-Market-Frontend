@@ -106,7 +106,7 @@ export default function Header() {
                     {dropdownOpen && user && (
                         <div className="absolute right-0 mt-2 w-40 bg-surface rounded-md shadow-lg overflow-hidden pl-3 z-20">
                             <Link
-                                to="/profile"
+                                to="/"
                                 className="w-full block px-4 py-2 text-textMuted hover:bg-border"
                             >
                                 Profile

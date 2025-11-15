@@ -16,12 +16,12 @@ export default function Products({ products }) {
                             className="bg-surface rounded-lg overflow-hidden shadow-lg transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 border border-primary flex flex-col"
                         >
                             {/* Product Image */}
-                            <div className="bg-border aspect-square flex items-center justify-center">
+                            <div className="bg-border aspect-square flex items-center justify-center overflow-hidden">
                                 {product.primaryImage ? (
                                     <img
                                         src={`${import.meta.env.VITE_API_URL}${product.primaryImage}`}
                                         alt={product.title}
-                                        className="object-cover w-4/5 h-4/5"
+                                        className="w-full h-full object-cover"
                                     />
                                 ) : (
                                     <Image className="w-16 h-16 text-gray-500" />

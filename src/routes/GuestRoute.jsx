@@ -9,7 +9,6 @@ const GuestRoute = () => {
     // If user is logged in, redirect to a default protected page
     if (user) return <Navigate to="/" replace />;
 
-    // Otherwise, allow access to login/register pages
     return <Outlet />;
 };
 
